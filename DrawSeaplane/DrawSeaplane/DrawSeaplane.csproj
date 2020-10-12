@@ -48,8 +48,13 @@
   <ItemGroup>
     <Compile Include="Direction.cs" />
     <Compile Include="Floaters.cs" />
-    <Compile Include="FloatersEnum.cs" />
-    <Compile Include="Seaplane.cs" />
+    <Compile Include="ElementsEnum.cs" />
+    <Compile Include="EmblemCircle.cs" />
+    <Compile Include="EmblemStar.cs" />
+    <Compile Include="EngineForm.cs" />
+    <Compile Include="IDopElement.cs" />
+    <Compile Include="ITransport.cs" />
+    <Compile Include="Plane.cs" />
     <Compile Include="FormSeaplane.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +63,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vehicle.cs" />
+    <Compile Include="WaterPlane.cs" />
     <EmbeddedResource Include="FormSeaplane.resx">
       <DependentUpon>FormSeaplane.cs</DependentUpon>
     </EmbeddedResource>
@@ -95,6 +102,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\arrowRight.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Star.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Circle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

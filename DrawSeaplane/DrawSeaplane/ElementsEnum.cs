@@ -6,10 +6,17 @@ using System.Threading.Tasks;
 
 namespace Seaplane
 {
-    enum FloatersEnum
+    enum ElementsEnum
     {
-        Two = 2,
-        Four = 4,
-        Six = 6
+        Two,
+        Four,
+        Six,
+
+        Triangle,      
+        Rectangle,
+        Ellipse,
+
+        Star,
+        Circle
     }
 }

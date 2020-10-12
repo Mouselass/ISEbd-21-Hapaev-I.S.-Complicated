@@ -7,41 +7,49 @@ using System.Drawing;
 
 namespace Seaplane
 {
-    class Floaters
+    class Floaters : IDopElement
     {
-        private FloatersEnum floaters;
+        private ElementsEnum floaters;
 
-        public int Digit { set => floaters = (FloatersEnum)value; }
-
-        public Color DopColor { private set; get; }
-        
-        public void Draw(Graphics g, float _startPosX, float _startPosY)
+        public int SetNumberOfElements
         {
-            switch (floaters)
+            set
             {
-                case FloatersEnum.Two:
-                    DrawTwoFloaters(g, _startPosX, _startPosY);
-                    break;
-
-                case FloatersEnum.Four:
-                    DrawFourFloaters(g, _startPosX, _startPosY);
-                    break;
-
-                case FloatersEnum.Six:
-                    DrawSixFloaters(g, _startPosX, _startPosY);
-                    break;
+                switch (value)
+                {
+                    case 2:
+                        floaters = ElementsEnum.Two;
+                        break;
+                    case 4:
+                        floaters = ElementsEnum.Four;
+                        break;
+                    case 6:
+                        floaters = ElementsEnum.Six;
+                        break;
+                }
             }
         }
 
-        public Floaters(int digit, Color dopColor)
+        public void DrawElement(Graphics g, Color dopColor, float _startPosX, float _startPosY)
         {
-            Digit = digit;
-            DopColor = dopColor;
+            if (floaters == ElementsEnum.Two)
+            {
+                DrawTwoFloaters(g, dopColor, _startPosX, _startPosY);
+            }
+            else if (floaters == ElementsEnum.Four)
+            {
+                DrawFourFloaters(g, dopColor, _startPosX, _startPosY);
+            }
+            else if (floaters == ElementsEnum.Six)
+            {
+                DrawSixFloaters(g, dopColor, _startPosX, _startPosY);
+            }
         }
 
-        private void DrawTwoFloaters(Graphics g, float _startPosX, float _startPosY)
+
+        private void DrawTwoFloaters(Graphics g, Color dopColor, float _startPosX, float _startPosY)
         {
-            Brush floater = new SolidBrush(DopColor);
+            Brush floater = new SolidBrush(dopColor);
 
             PointF f1 = new PointF(_startPosX + 30, _startPosY + 40);
             PointF f2 = new PointF(_startPosX + 30, _startPosY + 45);
@@ -62,11 +70,11 @@ namespace Seaplane
 
         }
 
-        private void DrawFourFloaters(Graphics g, float _startPosX, float _startPosY)
+        private void DrawFourFloaters(Graphics g, Color dopColor, float _startPosX, float _startPosY)
         {
-            Brush floater = new SolidBrush(DopColor);
+            Brush floater = new SolidBrush(dopColor);
 
-            DrawTwoFloaters(g, _startPosX, _startPosY);
+            DrawTwoFloaters(g, dopColor, _startPosX, _startPosY);
 
             PointF f1 = new PointF(_startPosX + 30, _startPosY + 50);
             PointF f2 = new PointF(_startPosX + 30, _startPosY + 55);
@@ -87,11 +95,11 @@ namespace Seaplane
 
         }
 
-        private void DrawSixFloaters(Graphics g, float _startPosX, float _startPosY)
+        private void DrawSixFloaters(Graphics g, Color dopColor, float _startPosX, float _startPosY)
         {
-            Brush floater = new SolidBrush(DopColor);
+            Brush floater = new SolidBrush(dopColor);
 
-            DrawFourFloaters(g, _startPosX, _startPosY);
+            DrawFourFloaters(g, dopColor, _startPosX, _startPosY);
 
             PointF f1 = new PointF(_startPosX + 30, _startPosY + 60);
             PointF f2 = new PointF(_startPosX + 30, _startPosY + 65);
