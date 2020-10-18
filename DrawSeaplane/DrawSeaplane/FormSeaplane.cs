@@ -16,9 +16,7 @@ namespace Seaplane
 
         public FormSeaplane()
         {
-            InitializeComponent();
-            comboBoxFloaters.Items.AddRange(new string[] { "2 поплавка", "4 поплавка", "6 поплавков" });
-          
+            InitializeComponent();         
         }
 
         private void Draw()
@@ -27,7 +25,6 @@ namespace Seaplane
             Graphics gr = Graphics.FromImage(bmp);
             plane.DrawTransport(gr);
             pictureBoxPlane.Image = bmp;
-
         }
 
         private void ButtonCreatePlane_Click(object sender, EventArgs e)
@@ -42,21 +39,13 @@ namespace Seaplane
         {
             Random rnd = new Random();
 
-            int numberOfFloaters = (comboBoxFloaters.SelectedIndex + 1) * 2;
-
             int engineForm = (checkBoxTriangle.Checked && !checkBoxRectangle.Checked && !checkBoxCircle.Checked) ? 1 : 
                 (!checkBoxTriangle.Checked && checkBoxRectangle.Checked && !checkBoxCircle.Checked) ? 2 :
                 (!checkBoxTriangle.Checked && !checkBoxRectangle.Checked && checkBoxCircle.Checked ? 3 : 0);
 
-            string emblem = (buttonStar.Enabled ? "Star" : (buttonCircle.Enabled ? "Circle" : "0"));
-
-            plane = new WaterPlane(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Gray, Color.Red, true,
-                numberOfFloaters, engineForm, emblem);
+            plane = new WaterPlane(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Gray, Color.Red, true, true, true, engineForm);
             plane.SetPosition(rnd.Next(10, 100), rnd.Next(10, 100), pictureBoxPlane.Width, pictureBoxPlane.Height);
-            Draw();
-
-            buttonCircle.Enabled = true;
-            buttonStar.Enabled = true;
+            Draw();            
         }
 
         private void buttonMove_Click(object sender, EventArgs e)
@@ -78,18 +67,6 @@ namespace Seaplane
                     break;
             }
             Draw();
-        }
-
-        private void buttonEmblem_Click(object sender, EventArgs e)
-        {
-            if (sender == buttonStar)
-            {
-                buttonCircle.Enabled = false;              
-            }
-            else if (sender == buttonCircle)
-            {
-                buttonStar.Enabled = false;
-            }
-        }
+        }       
     }
 }

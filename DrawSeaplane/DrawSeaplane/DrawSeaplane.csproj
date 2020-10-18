@@ -46,12 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CircleForm.cs" />
     <Compile Include="Direction.cs" />
-    <Compile Include="Floaters.cs" />
     <Compile Include="ElementsEnum.cs" />
-    <Compile Include="EmblemCircle.cs" />
-    <Compile Include="EmblemStar.cs" />
-    <Compile Include="EngineForm.cs" />
     <Compile Include="IDopElement.cs" />
     <Compile Include="ITransport.cs" />
     <Compile Include="Plane.cs" />
@@ -63,6 +60,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RectangleForm.cs" />
+    <Compile Include="TriangleForm.cs" />
     <Compile Include="Vehicle.cs" />
     <Compile Include="WaterPlane.cs" />
     <EmbeddedResource Include="FormSeaplane.resx">
@@ -102,12 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\arrowRight.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Star.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Circle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

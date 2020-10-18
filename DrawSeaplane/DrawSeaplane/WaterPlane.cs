@@ -16,23 +16,31 @@ namespace Seaplane
 
         public bool Wing { private set; get; }
 
-        IDopElement Floaters = new Floaters();
+        public bool Floater { private set; get; }
 
-        IDopElement EngineForm = new EngineForm();
+        IDopElement EngineForm;
 
-        IDopElement Emblem;
-
-        public WaterPlane(int maxSpeed, float weight, Color mainColor, Color dopColor, bool wing, int floatersCount, int engineform, string emblem) :
+        public WaterPlane(int maxSpeed, float weight, Color mainColor, Color dopColor, bool wing, bool star, bool floater, int engineform) :
             base(maxSpeed, weight, mainColor, 130, 60)
         {
             DopColor = dopColor;
             Wing = wing;
-            Floaters.SetNumberOfElements = floatersCount;
-            EngineForm.SetNumberOfElements = engineform;
-            if (emblem == "Star")
-                Emblem = new EmblemStar();
-            else if (emblem == "Circle")
-                Emblem = new EmblemCircle();
+            Star = star;
+            Floater = floater;
+
+            if (engineform == 1)
+            {
+                EngineForm = new TriangleForm(engineform, dopColor);
+            }
+            else if (engineform == 2)
+            {
+                EngineForm = new RectangleForm(engineform, dopColor);
+            }
+            else if (engineform == 3)
+            {
+                EngineForm = new CircleForm(engineform, dopColor);
+            }
+
         }
 
         public override void DrawTransport(Graphics g)
@@ -42,7 +50,6 @@ namespace Seaplane
             if (Wing)
             {
                 Brush wing = new SolidBrush(DopColor);
-
 
                 PointF w6 = new PointF(_startPosX + 50, _startPosY + 13);
                 PointF w7 = new PointF(_startPosX + 80, _startPosY + 33);
@@ -54,12 +61,48 @@ namespace Seaplane
                 g.FillPolygon(wing, dopWingP);
             }
 
+            if (Star) 
+            {
+                Brush star = new SolidBrush(DopColor);
 
-            Floaters.DrawElement(g, DopColor, _startPosX, _startPosY);
+                PointF s1 = new PointF(_startPosX + 85, _startPosY + 24);
+                PointF s2 = new PointF(_startPosX + 92, _startPosY + 22);
+                PointF s3 = new PointF(_startPosX + 100, _startPosY + 17);
+                PointF s4 = new PointF(_startPosX + 108, _startPosY + 22);
+                PointF s5 = new PointF(_startPosX + 115, _startPosY + 24);
+                PointF s6 = new PointF(_startPosX + 107, _startPosY + 29);
+                PointF s7 = new PointF(_startPosX + 110, _startPosY + 33);
+                PointF s8 = new PointF(_startPosX + 100, _startPosY + 31);
+                PointF s9 = new PointF(_startPosX + 90, _startPosY + 34);
+                PointF s10 = new PointF(_startPosX + 92, _startPosY + 29);
+
+                PointF[] starP = { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
+                g.FillPolygon(star, starP);
+            }
+
+            if (Floater)
+            {
+                Brush floater = new SolidBrush(DopColor);
+
+                PointF f1 = new PointF(_startPosX + 30, _startPosY + 40);
+                PointF f2 = new PointF(_startPosX + 30, _startPosY + 45);
+                PointF f3 = new PointF(_startPosX, _startPosY + 45);
+                PointF f4 = new PointF(_startPosX + 10, _startPosY + 55);
+                PointF f5 = new PointF(_startPosX + 70, _startPosY + 55);
+                PointF f6 = new PointF(_startPosX + 120, _startPosY + 45);
+                PointF f7 = new PointF(_startPosX + 70, _startPosY + 45);
+                PointF f8 = new PointF(_startPosX + 70, _startPosY + 40);
+                PointF f9 = new PointF(_startPosX + 65, _startPosY + 40);
+                PointF f10 = new PointF(_startPosX + 65, _startPosY + 45);
+                PointF f11 = new PointF(_startPosX + 35, _startPosY + 45);
+                PointF f12 = new PointF(_startPosX + 35, _startPosY + 40);
+                PointF f13 = new PointF(_startPosX + 30, _startPosY + 40);
+
+                PointF[] floaterP = { f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13 };
+                g.FillPolygon(floater, floaterP);
+            }
 
             EngineForm.DrawElement(g, DopColor, _startPosX, _startPosY);
-
-            Emblem.DrawElement(g, DopColor, _startPosX, _startPosY);
         }
     }
 }
