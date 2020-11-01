@@ -16,7 +16,8 @@ namespace Seaplane
 
         public FormSeaplane()
         {
-            InitializeComponent();         
+            InitializeComponent();
+            comboBoxFloaters.Items.AddRange(new string[] { "2 поплавка", "4 поплавка", "6 поплавков" });
         }
 
         private void Draw()
@@ -39,11 +40,11 @@ namespace Seaplane
         {
             Random rnd = new Random();
 
-            int engineForm = (checkBoxTriangle.Checked && !checkBoxRectangle.Checked && !checkBoxCircle.Checked) ? 1 : 
+            int floatersForm = (checkBoxTriangle.Checked && !checkBoxRectangle.Checked && !checkBoxCircle.Checked) ? 1 : 
                 (!checkBoxTriangle.Checked && checkBoxRectangle.Checked && !checkBoxCircle.Checked) ? 2 :
                 (!checkBoxTriangle.Checked && !checkBoxRectangle.Checked && checkBoxCircle.Checked ? 3 : 0);
-
-            plane = new WaterPlane(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Gray, Color.Red, true, true, true, engineForm);
+            int numberOfFloaters = (comboBoxFloaters.SelectedIndex + 1) * 2;
+            plane = new WaterPlane(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Gray, Color.Red, true, true, numberOfFloaters, floatersForm);
             plane.SetPosition(rnd.Next(10, 100), rnd.Next(10, 100), pictureBoxPlane.Width, pictureBoxPlane.Height);
             Draw();            
         }

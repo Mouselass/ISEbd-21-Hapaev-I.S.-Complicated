@@ -40,6 +40,8 @@
             this.buttonLeft = new System.Windows.Forms.Button();
             this.buttonUp = new System.Windows.Forms.Button();
             this.pictureBoxPlane = new System.Windows.Forms.PictureBox();
+            this.comboBoxFloaters = new System.Windows.Forms.ComboBox();
+            this.labelFloaters = new System.Windows.Forms.Label();
             this.groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlane)).BeginInit();
             this.SuspendLayout();
@@ -56,7 +58,7 @@
             // 
             // buttonCreateWaterPlane
             // 
-            this.buttonCreateWaterPlane.Location = new System.Drawing.Point(9, 111);
+            this.buttonCreateWaterPlane.Location = new System.Drawing.Point(6, 165);
             this.buttonCreateWaterPlane.Name = "buttonCreateWaterPlane";
             this.buttonCreateWaterPlane.Size = new System.Drawing.Size(79, 28);
             this.buttonCreateWaterPlane.TabIndex = 7;
@@ -66,6 +68,8 @@
             // 
             // groupBox
             // 
+            this.groupBox.Controls.Add(this.labelFloaters);
+            this.groupBox.Controls.Add(this.comboBoxFloaters);
             this.groupBox.Controls.Add(this.checkBoxCircle);
             this.groupBox.Controls.Add(this.checkBoxRectangle);
             this.groupBox.Controls.Add(this.checkBoxTriangle);
@@ -73,7 +77,7 @@
             this.groupBox.Controls.Add(this.buttonCreateWaterPlane);
             this.groupBox.Location = new System.Drawing.Point(726, 50);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(146, 158);
+            this.groupBox.Size = new System.Drawing.Size(146, 202);
             this.groupBox.TabIndex = 8;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Создать гидросамолет";
@@ -81,9 +85,9 @@
             // checkBoxCircle
             // 
             this.checkBoxCircle.AutoSize = true;
-            this.checkBoxCircle.Location = new System.Drawing.Point(9, 88);
+            this.checkBoxCircle.Location = new System.Drawing.Point(6, 133);
             this.checkBoxCircle.Name = "checkBoxCircle";
-            this.checkBoxCircle.Size = new System.Drawing.Size(104, 17);
+            this.checkBoxCircle.Size = new System.Drawing.Size(107, 17);
             this.checkBoxCircle.TabIndex = 11;
             this.checkBoxCircle.Text = "Круглая форма";
             this.checkBoxCircle.UseVisualStyleBackColor = true;
@@ -91,9 +95,9 @@
             // checkBoxRectangle
             // 
             this.checkBoxRectangle.AutoSize = true;
-            this.checkBoxRectangle.Location = new System.Drawing.Point(9, 65);
+            this.checkBoxRectangle.Location = new System.Drawing.Point(6, 110);
             this.checkBoxRectangle.Name = "checkBoxRectangle";
-            this.checkBoxRectangle.Size = new System.Drawing.Size(123, 17);
+            this.checkBoxRectangle.Size = new System.Drawing.Size(127, 17);
             this.checkBoxRectangle.TabIndex = 10;
             this.checkBoxRectangle.Text = "Квадратная форма";
             this.checkBoxRectangle.UseVisualStyleBackColor = true;
@@ -101,9 +105,9 @@
             // checkBoxTriangle
             // 
             this.checkBoxTriangle.AutoSize = true;
-            this.checkBoxTriangle.Location = new System.Drawing.Point(9, 42);
+            this.checkBoxTriangle.Location = new System.Drawing.Point(6, 87);
             this.checkBoxTriangle.Name = "checkBoxTriangle";
-            this.checkBoxTriangle.Size = new System.Drawing.Size(128, 17);
+            this.checkBoxTriangle.Size = new System.Drawing.Size(131, 17);
             this.checkBoxTriangle.TabIndex = 9;
             this.checkBoxTriangle.Text = "Треугольная форма";
             this.checkBoxTriangle.UseVisualStyleBackColor = true;
@@ -111,11 +115,11 @@
             // labelForm
             // 
             this.labelForm.AutoSize = true;
-            this.labelForm.Location = new System.Drawing.Point(6, 26);
+            this.labelForm.Location = new System.Drawing.Point(3, 71);
             this.labelForm.Name = "labelForm";
-            this.labelForm.Size = new System.Drawing.Size(99, 13);
+            this.labelForm.Size = new System.Drawing.Size(105, 13);
             this.labelForm.TabIndex = 8;
-            this.labelForm.Text = "Форма двигателя";
+            this.labelForm.Text = "Форма поплавков";
             // 
             // buttonRight
             // 
@@ -170,6 +174,23 @@
             this.pictureBoxPlane.TabIndex = 0;
             this.pictureBoxPlane.TabStop = false;
             // 
+            // comboBoxFloaters
+            // 
+            this.comboBoxFloaters.FormattingEnabled = true;
+            this.comboBoxFloaters.Location = new System.Drawing.Point(6, 38);
+            this.comboBoxFloaters.Name = "comboBoxFloaters";
+            this.comboBoxFloaters.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFloaters.TabIndex = 12;
+            // 
+            // labelFloaters
+            // 
+            this.labelFloaters.AutoSize = true;
+            this.labelFloaters.Location = new System.Drawing.Point(4, 22);
+            this.labelFloaters.Name = "labelFloaters";
+            this.labelFloaters.Size = new System.Drawing.Size(133, 13);
+            this.labelFloaters.TabIndex = 13;
+            this.labelFloaters.Text = "Количество поплавков:";
+            // 
             // FormSeaplane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -206,6 +227,8 @@
         private System.Windows.Forms.CheckBox checkBoxCircle;
         private System.Windows.Forms.CheckBox checkBoxRectangle;
         private System.Windows.Forms.CheckBox checkBoxTriangle;
+        private System.Windows.Forms.ComboBox comboBoxFloaters;
+        private System.Windows.Forms.Label labelFloaters;
     }
 }
 

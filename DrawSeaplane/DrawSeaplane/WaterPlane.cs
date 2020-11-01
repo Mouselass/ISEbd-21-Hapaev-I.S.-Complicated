@@ -16,29 +16,26 @@ namespace Seaplane
 
         public bool Wing { private set; get; }
 
-        public bool Floater { private set; get; }
+        IDopElement FloatersForm;
 
-        IDopElement EngineForm;
-
-        public WaterPlane(int maxSpeed, float weight, Color mainColor, Color dopColor, bool wing, bool star, bool floater, int engineform) :
+        public WaterPlane(int maxSpeed, float weight, Color mainColor, Color dopColor, bool wing, bool star, int numberOfFloaters, int floatersform) :
             base(maxSpeed, weight, mainColor, 130, 60)
         {
             DopColor = dopColor;
             Wing = wing;
-            Star = star;
-            Floater = floater;
+            Star = star;    
 
-            if (engineform == 1)
+            if (floatersform == 1)
             {
-                EngineForm = new TriangleForm(engineform, dopColor);
+                FloatersForm = new TriangleForm(numberOfFloaters, dopColor);
             }
-            else if (engineform == 2)
+            else if (floatersform == 2)
             {
-                EngineForm = new RectangleForm(engineform, dopColor);
+                FloatersForm = new RectangleForm(numberOfFloaters, dopColor);
             }
-            else if (engineform == 3)
+            else if (floatersform == 3)
             {
-                EngineForm = new CircleForm(engineform, dopColor);
+                FloatersForm = new CircleForm(numberOfFloaters, dopColor);
             }
 
         }
@@ -80,29 +77,7 @@ namespace Seaplane
                 g.FillPolygon(star, starP);
             }
 
-            if (Floater)
-            {
-                Brush floater = new SolidBrush(DopColor);
-
-                PointF f1 = new PointF(_startPosX + 30, _startPosY + 40);
-                PointF f2 = new PointF(_startPosX + 30, _startPosY + 45);
-                PointF f3 = new PointF(_startPosX, _startPosY + 45);
-                PointF f4 = new PointF(_startPosX + 10, _startPosY + 55);
-                PointF f5 = new PointF(_startPosX + 70, _startPosY + 55);
-                PointF f6 = new PointF(_startPosX + 120, _startPosY + 45);
-                PointF f7 = new PointF(_startPosX + 70, _startPosY + 45);
-                PointF f8 = new PointF(_startPosX + 70, _startPosY + 40);
-                PointF f9 = new PointF(_startPosX + 65, _startPosY + 40);
-                PointF f10 = new PointF(_startPosX + 65, _startPosY + 45);
-                PointF f11 = new PointF(_startPosX + 35, _startPosY + 45);
-                PointF f12 = new PointF(_startPosX + 35, _startPosY + 40);
-                PointF f13 = new PointF(_startPosX + 30, _startPosY + 40);
-
-                PointF[] floaterP = { f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13 };
-                g.FillPolygon(floater, floaterP);
-            }
-
-            EngineForm.DrawElement(g, DopColor, _startPosX, _startPosY);
+            FloatersForm.DrawElement(g, DopColor, _startPosX, _startPosY);
         }
     }
 }

@@ -8,6 +8,9 @@ namespace Seaplane
 {
     enum ElementsEnum
     {
+        Two = 2,
+        Four = 4,
+        Six = 6,
 
         Triangle,      
         Rectangle,
