@@ -40,6 +40,15 @@ namespace Seaplane
 
         }
 
+        public WaterPlane(int maxSpeed, float weight, Color mainColor, Color dopColor, bool wing, bool star) :
+            base(maxSpeed, weight, mainColor, 130, 60)
+        {
+            DopColor = dopColor;
+            Wing = wing;
+            Star = star;
+            FloatersForm = new TriangleForm(2, dopColor);
+        }
+
         public override void DrawTransport(Graphics g)
         {
             base.DrawTransport(g);

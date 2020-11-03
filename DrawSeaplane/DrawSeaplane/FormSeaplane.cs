@@ -12,12 +12,19 @@ namespace Seaplane
 {
     public partial class FormSeaplane : Form
     {
-        private Plane plane;
+        private ITransport plane;
 
         public FormSeaplane()
         {
             InitializeComponent();
             comboBoxFloaters.Items.AddRange(new string[] { "2 поплавка", "4 поплавка", "6 поплавков" });
+            buttonCreatePlane.Enabled = false;
+            buttonCreateWaterPlane.Enabled = false;
+        }
+        public void SetPlane(ITransport plane)
+        {
+            this.plane = plane;
+            Draw();
         }
 
         private void Draw()

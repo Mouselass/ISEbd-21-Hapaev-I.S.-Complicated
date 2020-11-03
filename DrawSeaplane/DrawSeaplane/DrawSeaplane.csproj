@@ -46,9 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aerodrome.cs" />
     <Compile Include="CircleForm.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="ElementsEnum.cs" />
+    <Compile Include="FormAerodrome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAerodrome.Designer.cs">
+      <DependentUpon>FormAerodrome.cs</DependentUpon>
+    </Compile>
     <Compile Include="IDopElement.cs" />
     <Compile Include="ITransport.cs" />
     <Compile Include="Plane.cs" />
@@ -64,6 +71,9 @@
     <Compile Include="TriangleForm.cs" />
     <Compile Include="Vehicle.cs" />
     <Compile Include="WaterPlane.cs" />
+    <EmbeddedResource Include="FormAerodrome.resx">
+      <DependentUpon>FormAerodrome.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormSeaplane.resx">
       <DependentUpon>FormSeaplane.cs</DependentUpon>
     </EmbeddedResource>
