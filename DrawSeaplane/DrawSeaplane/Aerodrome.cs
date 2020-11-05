@@ -55,41 +55,38 @@ namespace Seaplane
 
         public static bool operator >=(Aerodrome<T, P> a, int index)
         {
-            if (index > -1 && index < a._places.Length - 1)
+            int cnt = 0;
+
+            for (int i = 0; i < a._places.Length; i++) 
             {
-                if (a._places[index] is WaterPlane && a._places[index + 1] is Plane)
+                if (a._places[i] is Plane)
                 {
-                    return true;
+                    cnt++;
+                }
+                if (a._places[i] is WaterPlane) 
+                {
+                    cnt--;
                 }
             }
-            return false;
+
+            return (cnt >= index);
         }
 
         public static bool operator <=(Aerodrome<T, P> a, int index)
         {
-            if (index > -1 && index < a._places.Length - 1)
+            int cnt = 0;
+
+            for (int i = 0; i < a._places.Length; i++)
             {
-                if (a._places[index] is Plane && a._places[index + 1] is WaterPlane)
+                if (a._places[i] is WaterPlane)
                 {
-                    return true;
+                    cnt++;
                 }
             }
-            return false;
-        }
 
-        public void SwapPlane(int firstIndex, int secondIndex)
-        {
-            if ((firstIndex >= 0 && firstIndex < _places.Length) && (secondIndex >= 0 && secondIndex < _places.Length))
-            {
-                var temp = _places[firstIndex];
-                _places[firstIndex] = _places[secondIndex];
-                _places[secondIndex] = temp;
-                _places[firstIndex].SetPosition(10 + _placeSizeWidth * (int)(firstIndex / (int)(pictureHeight / _placeSizeHeight)),
-                        10 + _placeSizeHeight * (int)(firstIndex % (int)(pictureHeight / _placeSizeHeight)), pictureWidth, pictureHeight);
-                _places[secondIndex].SetPosition(10 + _placeSizeWidth * (int)(secondIndex / (int)(pictureHeight / _placeSizeHeight)),
-                        10 + _placeSizeHeight * (int)(secondIndex % (int)(pictureHeight / _placeSizeHeight)), pictureWidth, pictureHeight);
-            }
+            return (cnt >= index);
         }
+        
         public void Draw(Graphics g)
         {
             DrawMarking(g);

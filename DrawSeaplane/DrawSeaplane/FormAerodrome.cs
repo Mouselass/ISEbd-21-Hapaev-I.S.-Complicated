@@ -83,33 +83,27 @@ namespace Seaplane
             }
         }
 
-        private void ButtonSortPlanes_Click(object sender, EventArgs e)
+        private void ButtonComparePlanes_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < aerodrome._places.Length - 1; i++)
+            if (aerodrome >= Convert.ToInt32(maskedTextBoxCompare.Text))
             {
-                for (int j = 0; j < aerodrome._places.Length - 1; j++)
-                {
-                    if (aerodrome >= j)
-                    {
-                        aerodrome.SwapPlane(j, j + 1);
-                    }
-                }
+                MessageBox.Show("Количество самолетов больше или равно введенному числу");
             }
-            Draw();
+            else
+            {
+                MessageBox.Show("Количество самолетов меньше, чем введенное число");
+            }            
         }
-        private void ButtonSortWaterPlanes_Click(object sender, EventArgs e)
+        private void ButtonCompareWaterPlanes_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < aerodrome._places.Length - 1; i++)
+            if (aerodrome <= Convert.ToInt32(maskedTextBoxCompare.Text))
             {
-                for (int j = 0; j < aerodrome._places.Length - 1; j++)
-                {
-                    if (aerodrome <= j)
-                    {
-                        aerodrome.SwapPlane(j, j + 1);
-                    }
-                }
+                MessageBox.Show("Количество гидросамолетов больше или равно введенному числу");
             }
-            Draw();
+            else
+            {
+                MessageBox.Show("Количество гидросамолетов меньше, чем введенное число");
+            }           
         }
     }
 }

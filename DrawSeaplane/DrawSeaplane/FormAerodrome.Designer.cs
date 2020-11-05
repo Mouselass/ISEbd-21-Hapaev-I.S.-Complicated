@@ -35,8 +35,10 @@
             this.maskedTextBox = new System.Windows.Forms.MaskedTextBox();
             this.buttonTake = new System.Windows.Forms.Button();
             this.labelPlace = new System.Windows.Forms.Label();
-            this.buttonSortPlanes = new System.Windows.Forms.Button();
-            this.buttonSortWaterPlanes = new System.Windows.Forms.Button();
+            this.buttonComparePlanes = new System.Windows.Forms.Button();
+            this.buttonCompareWaterPlanes = new System.Windows.Forms.Button();
+            this.maskedTextBoxCompare = new System.Windows.Forms.MaskedTextBox();
+            this.labelCompare = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAerodrome)).BeginInit();
             this.groupBoxTakePlane.SuspendLayout();
             this.SuspendLayout();
@@ -109,33 +111,50 @@
             this.labelPlace.TabIndex = 0;
             this.labelPlace.Text = "Место :";
             // 
-            // buttonSortPlanes
+            // buttonComparePlanes
             // 
-            this.buttonSortPlanes.Location = new System.Drawing.Point(772, 381);
-            this.buttonSortPlanes.Name = "buttonSortPlanes";
-            this.buttonSortPlanes.Size = new System.Drawing.Size(125, 46);
-            this.buttonSortPlanes.TabIndex = 4;
-            this.buttonSortPlanes.Text = "Сортировать: сначала самолеты";
-            this.buttonSortPlanes.UseVisualStyleBackColor = true;
-            this.buttonSortPlanes.Click += new System.EventHandler(this.ButtonSortPlanes_Click);
+            this.buttonComparePlanes.Location = new System.Drawing.Point(772, 387);
+            this.buttonComparePlanes.Name = "buttonComparePlanes";
+            this.buttonComparePlanes.Size = new System.Drawing.Size(125, 64);
+            this.buttonComparePlanes.TabIndex = 4;
+            this.buttonComparePlanes.Text = "Сравнить количество самолетов с введенным числом";
+            this.buttonComparePlanes.UseVisualStyleBackColor = true;
+            this.buttonComparePlanes.Click += new System.EventHandler(this.ButtonComparePlanes_Click);
             // 
-            // buttonSortWaterPlanes
+            // buttonCompareWaterPlanes
             // 
-            this.buttonSortWaterPlanes.Location = new System.Drawing.Point(772, 442);
-            this.buttonSortWaterPlanes.Name = "buttonSortWaterPlanes";
-            this.buttonSortWaterPlanes.Size = new System.Drawing.Size(125, 52);
-            this.buttonSortWaterPlanes.TabIndex = 5;
-            this.buttonSortWaterPlanes.Text = "Сортировать: сначала гидросамолеты";
-            this.buttonSortWaterPlanes.UseVisualStyleBackColor = true;
-            this.buttonSortWaterPlanes.Click += new System.EventHandler(this.ButtonSortWaterPlanes_Click);
+            this.buttonCompareWaterPlanes.Location = new System.Drawing.Point(772, 457);
+            this.buttonCompareWaterPlanes.Name = "buttonCompareWaterPlanes";
+            this.buttonCompareWaterPlanes.Size = new System.Drawing.Size(125, 65);
+            this.buttonCompareWaterPlanes.TabIndex = 5;
+            this.buttonCompareWaterPlanes.Text = "Сравнить количество гидросамолетов с введенным числом";
+            this.buttonCompareWaterPlanes.UseVisualStyleBackColor = true;
+            this.buttonCompareWaterPlanes.Click += new System.EventHandler(this.ButtonCompareWaterPlanes_Click);
+            // 
+            // maskedTextBoxCompare
+            // 
+            this.maskedTextBoxCompare.Location = new System.Drawing.Point(864, 344);
+            this.maskedTextBoxCompare.Name = "maskedTextBoxCompare";
+            this.maskedTextBoxCompare.Size = new System.Drawing.Size(33, 22);
+            this.maskedTextBoxCompare.TabIndex = 6;
+            // 
+            // labelCompare
+            // 
+            this.labelCompare.Location = new System.Drawing.Point(763, 332);
+            this.labelCompare.Name = "labelCompare";
+            this.labelCompare.Size = new System.Drawing.Size(100, 34);
+            this.labelCompare.TabIndex = 7;
+            this.labelCompare.Text = "Введите число для сравнения:";
             // 
             // FormAerodrome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(909, 534);
-            this.Controls.Add(this.buttonSortWaterPlanes);
-            this.Controls.Add(this.buttonSortPlanes);
+            this.Controls.Add(this.labelCompare);
+            this.Controls.Add(this.maskedTextBoxCompare);
+            this.Controls.Add(this.buttonCompareWaterPlanes);
+            this.Controls.Add(this.buttonComparePlanes);
             this.Controls.Add(this.groupBoxTakePlane);
             this.Controls.Add(this.buttonLandWaterplane);
             this.Controls.Add(this.buttonLandPlane);
@@ -146,6 +165,7 @@
             this.groupBoxTakePlane.ResumeLayout(false);
             this.groupBoxTakePlane.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -158,7 +178,9 @@
         private System.Windows.Forms.MaskedTextBox maskedTextBox;
         private System.Windows.Forms.Button buttonTake;
         private System.Windows.Forms.Label labelPlace;
-        private System.Windows.Forms.Button buttonSortPlanes;
-        private System.Windows.Forms.Button buttonSortWaterPlanes;
+        private System.Windows.Forms.Button buttonComparePlanes;
+        private System.Windows.Forms.Button buttonCompareWaterPlanes;
+        private System.Windows.Forms.MaskedTextBox maskedTextBoxCompare;
+        private System.Windows.Forms.Label labelCompare;
     }
 }
