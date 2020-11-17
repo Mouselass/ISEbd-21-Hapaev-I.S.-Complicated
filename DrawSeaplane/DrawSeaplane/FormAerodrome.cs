@@ -12,50 +12,84 @@ namespace Seaplane
 {
     public partial class FormAerodrome : Form
     {
-        private readonly Aerodrome<Plane, CircleForm> aerodrome;
+        private readonly AerodromeCollection aerodromeCollection;
+
+        private readonly Queue<Vehicle> planeQueue;
 
         public FormAerodrome()
         {
             InitializeComponent();
-            aerodrome = new Aerodrome<Plane, CircleForm>(pictureBoxAerodrome.Width, pictureBoxAerodrome.Height);
+            aerodromeCollection = new AerodromeCollection(pictureBoxAerodrome.Width, pictureBoxAerodrome.Height);
+            planeQueue = new Queue<Vehicle>();
             Draw();
+        }
+
+        private void ReloadLevels()
+        {
+            int index = listBoxAerodrome.SelectedIndex;
+
+            listBoxAerodrome.Items.Clear();
+            for (int i = 0; i < aerodromeCollection.Keys.Count; i++)
+            {
+                listBoxAerodrome.Items.Add(aerodromeCollection.Keys[i]);
+            }
+
+            if (listBoxAerodrome.Items.Count > 0 && (index == -1 || index >= listBoxAerodrome.Items.Count))
+            {
+                listBoxAerodrome.SelectedIndex = 0;
+            }
+            else if (listBoxAerodrome.Items.Count > 0 && index > -1 && index < listBoxAerodrome.Items.Count)
+            {
+                listBoxAerodrome.SelectedIndex = index;
+            }
         }
 
         private void Draw()
         {
-            Bitmap bmp = new Bitmap(pictureBoxAerodrome.Width, pictureBoxAerodrome.Height);
-            Graphics gr = Graphics.FromImage(bmp);
-            aerodrome.Draw(gr);
-            pictureBoxAerodrome.Image = bmp;
+            if (listBoxAerodrome.SelectedIndex > -1)
+            {
+                Bitmap bmp = new Bitmap(pictureBoxAerodrome.Width, pictureBoxAerodrome.Height);
+                Graphics gr = Graphics.FromImage(bmp);
+                aerodromeCollection[listBoxAerodrome.SelectedItem.ToString()].Draw(gr);
+                pictureBoxAerodrome.Image = bmp;
+
+            }
         }
 
-        private void buttonLandPlane_Click(object sender, EventArgs e)
+        private void buttonAddAerodrome_Click(object sender, EventArgs e)
         {
-            ColorDialog dialog = new ColorDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (string.IsNullOrEmpty(textBoxNewLevelName.Text))
             {
-                var plane = new Plane(100, 1000, dialog.Color);
-                if (aerodrome + plane)
+                MessageBox.Show("Введите название аэродрома", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            aerodromeCollection.AddAerodrome(textBoxNewLevelName.Text);
+            ReloadLevels();
+            textBoxNewLevelName.Text = "";
+        }
+
+        private void buttonDeleteAerodrome_Click(object sender, EventArgs e)
+        {
+            if (listBoxAerodrome.SelectedIndex > -1)
+            {
+                if (MessageBox.Show($"Удалить аэродром { listBoxAerodrome.SelectedItem.ToString()}?", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    Draw();
-                }
-                else
-                {
-                    MessageBox.Show("Недостаточно мест");
+                    aerodromeCollection.DelAerodrome(listBoxAerodrome.SelectedItem.ToString());
+                    ReloadLevels();
                 }
             }
         }
 
-        private void buttonLandWaterplane_Click(object sender, EventArgs e)
+        private void buttonLandPlane_Click(object sender, EventArgs e)
         {
-            ColorDialog dialog = new ColorDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (listBoxAerodrome.SelectedIndex > -1)
             {
-                ColorDialog dialogDop = new ColorDialog();
-                if (dialogDop.ShowDialog() == DialogResult.OK)
+                ColorDialog dialog = new ColorDialog();
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    var plane = new WaterPlane(100, 1000, dialog.Color, dialogDop.Color, true, true);
-                    if (aerodrome + plane)
+                    var plane = new Plane(100, 1000, dialog.Color);
+                    if (aerodromeCollection[listBoxAerodrome.SelectedItem.ToString()] + plane)
                     {
                         Draw();
                     }
@@ -67,43 +101,60 @@ namespace Seaplane
             }
         }
 
+        private void buttonLandWaterplane_Click(object sender, EventArgs e)
+        {
+            if (listBoxAerodrome.SelectedIndex > -1)
+            {
+                ColorDialog dialog = new ColorDialog();
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    ColorDialog dialogDop = new ColorDialog();
+                    if (dialogDop.ShowDialog() == DialogResult.OK)
+                    {
+                        var plane = new WaterPlane(100, 1000, dialog.Color, dialogDop.Color, true, true);
+                        if (aerodromeCollection[listBoxAerodrome.SelectedItem.ToString()] + plane)
+                        {
+                            Draw();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Недостаточно мест");
+                        }
+                    }
+                }
+            }
+        }
+
         private void buttonTakePlane_Click(object sender, EventArgs e)
         {
-            if (maskedTextBox.Text != "")
+            if (listBoxAerodrome.SelectedIndex > -1 && maskedTextBox.Text != "")
             {
-                var plane = aerodrome - Convert.ToInt32(maskedTextBox.Text);
+                var plane = aerodromeCollection[listBoxAerodrome.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
                 if (plane != null)
                 {
-                    FormSeaplane form = new FormSeaplane();
-                    form.SetPlane(plane);
-
-                    form.ShowDialog();
+                    planeQueue.Enqueue(plane);
                 }
                 Draw();
             }
         }
 
-        private void ButtonComparePlanes_Click(object sender, EventArgs e)
+        private void listBoxAerodrome_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (aerodrome >= Convert.ToInt32(maskedTextBoxCompare.Text))
-            {
-                MessageBox.Show("Количество самолетов больше или равно введенному числу");
-            }
-            else
-            {
-                MessageBox.Show("Количество самолетов меньше, чем введенное число");
-            }            
+            Draw();
         }
-        private void ButtonCompareWaterPlanes_Click(object sender, EventArgs e)
+
+        private void buttonCheckPlanes_Click(object sender, EventArgs e)
         {
-            if (aerodrome <= Convert.ToInt32(maskedTextBoxCompare.Text))
+            if (planeQueue.Count() > 0)
             {
-                MessageBox.Show("Количество гидросамолетов больше или равно введенному числу");
+                FormSeaplane form = new FormSeaplane();
+                form.SetPlane(planeQueue.Dequeue());
+                form.ShowDialog();
             }
             else
             {
-                MessageBox.Show("Количество гидросамолетов меньше, чем введенное число");
-            }           
+                MessageBox.Show("Не осталось самолетов для просмотра");
+            }
         }
     }
 }

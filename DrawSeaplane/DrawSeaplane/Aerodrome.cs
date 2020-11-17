@@ -9,7 +9,9 @@ namespace Seaplane
 {
     public class Aerodrome<T, P> where T : class, ITransport where P : class, IDopElement
     {
-        public readonly T[] _places;
+        public readonly List<T> _places;
+
+        private readonly int _maxCount;
 
         private readonly int pictureWidth;
 
@@ -23,76 +25,45 @@ namespace Seaplane
         {
             int width = picWidth / _placeSizeWidth;
             int height = picHeight / _placeSizeHeight;
-            _places = new T[width * height];
+            _maxCount = width * height;
             pictureWidth = picWidth;
             pictureHeight = picHeight;
+            _places = new List<T>();
         }
 
         public static bool operator +(Aerodrome<T, P> a, T plane)
         {
-            for (int i = 0; i < a._places.Length; i++)
+            if (a._places.Count >= a._maxCount)
             {
-                if (a._places[i] == null)
-                {
-                    plane.SetPosition(10 + a._placeSizeWidth * (int)(i / (int)(a.pictureHeight / a._placeSizeHeight)), 10 + a._placeSizeHeight * (int)(i % (int)(a.pictureHeight / a._placeSizeHeight)), a.pictureWidth, a.pictureHeight);
-                    a._places[i] = plane;
-                    return true;
-                }
+                return false;
             }
-            return false;
+
+            a._places.Add(plane);
+
+            return true;
         }
 
         public static T operator -(Aerodrome<T, P> a, int index)
         {
-            if ((index < a._places.Length) && (index >= 0))
+            if (index < -1 || index > a._places.Count)
             {
-                T plane = a._places[index];
-                a._places[index] = null;
-                return plane;
-            }
-            return null;
-        }
-
-        public static bool operator >=(Aerodrome<T, P> a, int index)
-        {
-            int cnt = 0;
-
-            for (int i = 0; i < a._places.Length; i++) 
-            {
-                if (a._places[i] is Plane)
-                {
-                    cnt++;
-                }
-                if (a._places[i] is WaterPlane) 
-                {
-                    cnt--;
-                }
+                return null;
             }
 
-            return (cnt >= index);
+            T plane = a._places[index];
+
+            a._places.RemoveAt(index);
+
+            return plane;
         }
 
-        public static bool operator <=(Aerodrome<T, P> a, int index)
-        {
-            int cnt = 0;
-
-            for (int i = 0; i < a._places.Length; i++)
-            {
-                if (a._places[i] is WaterPlane)
-                {
-                    cnt++;
-                }
-            }
-
-            return (cnt >= index);
-        }
-        
         public void Draw(Graphics g)
         {
             DrawMarking(g);
-            for (int i = 0; i < _places.Length; i++)
+            for (int i = 0; i < _places.Count; ++i)
             {
-                _places[i]?.DrawTransport(g);
+                _places[i].SetPosition(5 + i / 6 * _placeSizeWidth + 5, i % 6 * _placeSizeHeight + 15, pictureWidth, pictureHeight);
+                _places[i].DrawTransport(g);
             }
         }
 
@@ -108,6 +79,18 @@ namespace Seaplane
                 }
 
                 g.DrawLine(pen, i * _placeSizeWidth, 0, i * _placeSizeWidth, (pictureHeight / _placeSizeHeight) * _placeSizeHeight);
+            }
+        }
+
+        public T this[int ind]
+        {
+            get
+            {
+                if (ind >= 0 && ind < _maxCount)
+                {
+                    return _places[ind];
+                }
+                return null;
             }
         }
     }
