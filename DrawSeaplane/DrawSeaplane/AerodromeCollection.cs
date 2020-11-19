@@ -62,7 +62,7 @@ namespace Seaplane
             {
                 if (aerodromeStages.ContainsKey(key) && ind >= 0)
                 {
-                    return aerodromeStages[key]._places[ind];
+                    return aerodromeStages[key][ind];
                 }
                 return null;
             }
