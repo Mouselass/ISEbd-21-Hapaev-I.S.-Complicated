@@ -156,5 +156,27 @@ namespace Seaplane
                 MessageBox.Show("Не осталось самолетов для просмотра");
             }
         }
+
+        private void buttonAddPlane_Click(object sender, EventArgs e)
+        {
+            var formPlaneConfig = new FormPlaneConfig();
+            formPlaneConfig.AddEvent(AddPlane);
+            formPlaneConfig.Show();
+        }
+
+        private void AddPlane(Vehicle plane)
+        {
+            if (plane != null && listBoxAerodrome.SelectedIndex > -1)
+            {
+                if ((aerodromeCollection[listBoxAerodrome.SelectedItem.ToString()]) + plane)
+                {
+                    Draw();
+                }
+                else
+                {
+                    MessageBox.Show("Самолет не удалось поставить");
+                }
+            }
+        }
     }
 }

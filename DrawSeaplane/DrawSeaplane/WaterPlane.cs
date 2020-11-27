@@ -16,26 +16,61 @@ namespace Seaplane
 
         public bool Wing { private set; get; }
 
-        IDopElement FloatersForm;
+        public int Floaters { private set; get; }
 
-        public WaterPlane(int maxSpeed, float weight, Color mainColor, Color dopColor, bool wing, bool star, int numberOfFloaters, int floatersform) :
+        public string FloatersForm { private set; get; }
+
+        IDopElement Floater;
+
+        public void SetDopColor(Color color) 
+        {
+            DopColor = color;
+
+            if (FloatersForm == "CircleForm")
+            {
+                Floater = new CircleForm(Floaters, DopColor);
+            }
+            else if (FloatersForm == "RectangleForm")
+            {
+                Floater = new RectangleForm(Floaters, DopColor);
+            }
+            else if (FloatersForm == "TriangleForm")
+            {
+                Floater = new TriangleForm(Floaters, DopColor);
+            }
+        }
+
+        public void SetFloater(IDopElement floater)
+        {
+            Floater = floater;
+            FloatersForm = Floater.GetType().Name;
+        }
+
+        public void SetNumberOfFloaters(int numberOfFloaters)
+        {
+            Floaters = numberOfFloaters;
+        }
+
+        public WaterPlane(int maxSpeed, float weight, Color mainColor, Color dopColor, bool wing, bool star, int numberOfFloaters, string floatersForm) :
             base(maxSpeed, weight, mainColor, 130, 60)
         {
             DopColor = dopColor;
             Wing = wing;
-            Star = star;    
+            Star = star;
+            Floaters = numberOfFloaters;
+            FloatersForm = floatersForm;
 
-            if (floatersform == 1)
+            if (FloatersForm == "TriangleForm")
             {
-                FloatersForm = new TriangleForm(numberOfFloaters, dopColor);
+                Floater = new TriangleForm(Floaters, DopColor);
             }
-            else if (floatersform == 2)
+            else if (FloatersForm == "RectangleForm")
             {
-                FloatersForm = new RectangleForm(numberOfFloaters, dopColor);
+                Floater = new RectangleForm(Floaters, DopColor);
             }
-            else if (floatersform == 3)
+            else if (FloatersForm == "CircleForm")
             {
-                FloatersForm = new CircleForm(numberOfFloaters, dopColor);
+                Floater = new CircleForm(Floaters, DopColor);
             }
 
         }
@@ -46,13 +81,12 @@ namespace Seaplane
             DopColor = dopColor;
             Wing = wing;
             Star = star;
-            FloatersForm = new TriangleForm(2, dopColor);
         }
 
         public override void DrawTransport(Graphics g)
         {
             base.DrawTransport(g);
-            
+
             if (Wing)
             {
                 Brush wing = new SolidBrush(DopColor);
@@ -67,7 +101,7 @@ namespace Seaplane
                 g.FillPolygon(wing, dopWingP);
             }
 
-            if (Star) 
+            if (Star)
             {
                 Brush star = new SolidBrush(DopColor);
 
@@ -86,7 +120,10 @@ namespace Seaplane
                 g.FillPolygon(star, starP);
             }
 
-            FloatersForm.DrawElement(g, DopColor, _startPosX, _startPosY);
+            if (Floater != null)
+            {
+                Floater.DrawElement(g, DopColor, _startPosX, _startPosY);
+            }
         }
     }
 }
