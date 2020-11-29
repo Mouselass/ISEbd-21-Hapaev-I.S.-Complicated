@@ -142,7 +142,7 @@
             this.pictureBoxAerodrome.Cursor = System.Windows.Forms.Cursors.Default;
             this.pictureBoxAerodrome.Location = new System.Drawing.Point(1, 9);
             this.pictureBoxAerodrome.Name = "pictureBoxAerodrome";
-            this.pictureBoxAerodrome.Size = new System.Drawing.Size(757, 495);
+            this.pictureBoxAerodrome.Size = new System.Drawing.Size(757, 523);
             this.pictureBoxAerodrome.TabIndex = 0;
             this.pictureBoxAerodrome.TabStop = false;
             this.pictureBoxAerodrome.Click += new System.EventHandler(this.buttonAddPlane_Click);

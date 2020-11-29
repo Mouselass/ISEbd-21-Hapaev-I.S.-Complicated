@@ -19,7 +19,7 @@ namespace Seaplane
 
         private readonly int _placeSizeWidth = 250;
 
-        private readonly int _placeSizeHeight = 80;
+        private readonly int _placeSizeHeight = 100;
 
         public Aerodrome(int picWidth, int picHeight)
         {
@@ -62,7 +62,7 @@ namespace Seaplane
             DrawMarking(g);
             for (int i = 0; i < _places.Count; ++i)
             {
-                _places[i].SetPosition(5 + i / 6 * _placeSizeWidth + 5, i % 6 * _placeSizeHeight + 15, pictureWidth, pictureHeight);
+                _places[i].SetPosition(5 + i / 5 * _placeSizeWidth + 5, i % 5 * _placeSizeHeight + 15, pictureWidth, pictureHeight);
                 _places[i].DrawTransport(g);
             }
         }
