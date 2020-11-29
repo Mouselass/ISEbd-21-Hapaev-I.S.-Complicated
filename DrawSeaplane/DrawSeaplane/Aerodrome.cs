@@ -86,7 +86,7 @@ namespace Seaplane
         {
             get
             {
-                if (ind >= 0 && ind < _maxCount)
+                if (ind >= 0 && ind < _places.Count)
                 {
                     return _places[ind];
                 }

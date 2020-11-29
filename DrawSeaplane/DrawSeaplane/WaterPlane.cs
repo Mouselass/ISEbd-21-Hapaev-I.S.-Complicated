@@ -83,6 +83,34 @@ namespace Seaplane
             Star = star;
         }
 
+        public WaterPlane(string info) : base(info)
+        {
+            string[] strs = info.Split(separator);
+            if (strs.Length == 8)
+            {
+                MaxSpeed = Convert.ToInt32(strs[0]);
+                Weight = Convert.ToInt32(strs[1]);
+                MainColor = Color.FromName(strs[2]);
+                DopColor = Color.FromName(strs[3]);
+                Star = Convert.ToBoolean(strs[4]);
+                Wing = Convert.ToBoolean(strs[5]);
+                Floaters = Convert.ToInt32(strs[6]);
+                FloatersForm = strs[7];
+                if (FloatersForm == "TriangleForm")
+                {
+                    Floater = new TriangleForm(Floaters, DopColor);
+                }
+                else if (FloatersForm == "RectangleForm")
+                {
+                    Floater = new RectangleForm(Floaters, DopColor);
+                }
+                else if (FloatersForm == "CircleForm")
+                {
+                    Floater = new CircleForm(Floaters, DopColor);
+                }
+            }
+        }
+
         public override void DrawTransport(Graphics g)
         {
             base.DrawTransport(g);
@@ -124,6 +152,11 @@ namespace Seaplane
             {
                 Floater.DrawElement(g, DopColor, _startPosX, _startPosY);
             }
+        }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}{separator}{DopColor.Name}{separator}{Star}{separator}{Wing}{separator}{Floaters}{separator}{FloatersForm}";
         }
     }
 }

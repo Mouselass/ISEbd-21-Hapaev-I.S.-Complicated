@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Seaplane
 {
@@ -15,6 +16,8 @@ namespace Seaplane
         private readonly int pictureWidth;
 
         private readonly int pictureHeight;
+
+        private readonly char separator = ':';
 
         public AerodromeCollection(int pictureWidth, int pictureHeight)
         {
@@ -65,6 +68,139 @@ namespace Seaplane
                     return aerodromeStages[key][ind];
                 }
                 return null;
+            }
+        }
+
+        public bool SaveData(string filename)
+        {
+            if (File.Exists(filename))
+            {
+                File.Delete(filename);
+            }
+            using (FileStream fs = new FileStream(filename, FileMode.Create))
+            {
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                {
+                    sw.WriteLine($"AerodromeCollection");
+
+                    foreach (var level in aerodromeStages)
+                    {
+                        sw.WriteLine($"Aerodrome{separator}{level.Key}");
+
+                        ITransport plane = null;
+
+                        for (int i = 0; (plane = level.Value[i]) != null; i++)
+                        {
+                            if (plane != null)
+                            {
+                                if (plane.GetType().Name == "Plane")
+                                {
+                                    sw.Write($"Plane{separator}");
+
+                                }
+                                if (plane.GetType().Name == "WaterPlane")
+                                {
+                                    sw.Write($"WaterPlane{separator}");
+                                }
+
+                                sw.WriteLine(plane);
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool SaveData(string filename, string aerodromeName)
+        {
+            if (File.Exists(filename))
+            {
+                File.Delete(filename);
+            }
+            using (FileStream fs = new FileStream(filename, FileMode.Create))
+            {
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                {
+                    sw.WriteLine($"OneAerodrome");
+
+                    sw.WriteLine($"Aerodrome{separator}{aerodromeName}");
+                    ITransport plane = null;
+                    var level = aerodromeStages[aerodromeName];
+
+                    for (int i = 0; (plane = level[i]) != null; i++)
+                    {
+                        if (plane != null)
+                        {
+                            if (plane.GetType().Name == "Plane")
+                            {
+                                sw.Write($"Plane{separator}");
+
+                            }
+                            if (plane.GetType().Name == "WaterPlane")
+                            {
+                                sw.Write($"WaterPlane{separator}");
+                            }
+
+                            sw.WriteLine(plane);
+                        }
+                    }
+
+                }
+            }
+            return true;
+        }
+
+        public bool LoadData(string filename, bool loadType) // true - collection; false - one dock
+        {
+            if (!File.Exists(filename))
+            {
+                return false;
+            }
+            using (StreamReader sr = new StreamReader(filename))
+            {
+                string line = sr.ReadLine();
+                if (line.Contains("AerodromeCollection") && loadType)
+                {
+                    aerodromeStages.Clear();
+                }
+                else if (line.Contains("OneAerodrome") && !loadType) { }
+                else
+                { 
+                    return false;
+                }
+                line = sr.ReadLine();
+                Vehicle ship = null;
+                string key = string.Empty;
+                while (line != null && line.Contains("Aerodrome"))
+                {
+                    key = line.Split(separator)[1];
+                    if (aerodromeStages.ContainsKey(key))
+                    {
+                        aerodromeStages.Remove(key);
+                    }
+                    aerodromeStages.Add(key, new Aerodrome<Vehicle, CircleForm>(pictureWidth, pictureHeight));
+
+                    line = sr.ReadLine();
+                    while (line != null && (line.Contains("Plane") || line.Contains("WaterPlane")))
+                    {
+                        if (line.Split(separator)[0] == "Plane")
+                        {
+                            ship = new Plane(line.Split(separator)[1]);
+                        }
+                        else if (line.Split(separator)[0] == "WaterPlane")
+                        {
+                            ship = new WaterPlane(line.Split(separator)[1]);
+                        }
+                        var result = aerodromeStages[key] + ship;
+                        if (!result)
+                        {
+                            return false;
+                        }
+                        line = sr.ReadLine();
+                    }
+                }
+                return true;
             }
         }
     }

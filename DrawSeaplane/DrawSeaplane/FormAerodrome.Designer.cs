@@ -40,8 +40,19 @@
             this.buttonCheckPlanes = new System.Windows.Forms.Button();
             this.pictureBoxAerodrome = new System.Windows.Forms.PictureBox();
             this.buttonAddPlane = new System.Windows.Forms.Button();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.загрузитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.всеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.толькоВыбранныйToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.всеToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.толькоОдинToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxTakePlane.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAerodrome)).BeginInit();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxTakePlane
@@ -140,9 +151,9 @@
             // pictureBoxAerodrome
             // 
             this.pictureBoxAerodrome.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pictureBoxAerodrome.Location = new System.Drawing.Point(1, 9);
+            this.pictureBoxAerodrome.Location = new System.Drawing.Point(1, 27);
             this.pictureBoxAerodrome.Name = "pictureBoxAerodrome";
-            this.pictureBoxAerodrome.Size = new System.Drawing.Size(757, 523);
+            this.pictureBoxAerodrome.Size = new System.Drawing.Size(757, 505);
             this.pictureBoxAerodrome.TabIndex = 0;
             this.pictureBoxAerodrome.TabStop = false;
             this.pictureBoxAerodrome.Click += new System.EventHandler(this.buttonAddPlane_Click);
@@ -156,6 +167,78 @@
             this.buttonAddPlane.Text = "Добавить самолет";
             this.buttonAddPlane.UseVisualStyleBackColor = true;
             this.buttonAddPlane.Click += new System.EventHandler(this.buttonAddPlane_Click);
+            // 
+            // menuStrip
+            // 
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.файлToolStripMenuItem});
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(933, 24);
+            this.menuStrip.TabIndex = 11;
+            // 
+            // файлToolStripMenuItem
+            // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.сохранитьToolStripMenuItem,
+            this.загрузитьToolStripMenuItem});
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // сохранитьToolStripMenuItem
+            // 
+            this.сохранитьToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.всеToolStripMenuItem,
+            this.толькоВыбранныйToolStripMenuItem});
+            this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.сохранитьToolStripMenuItem.Text = "Сохранить";
+            // 
+            // загрузитьToolStripMenuItem
+            // 
+            this.загрузитьToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.всеToolStripMenuItem1,
+            this.толькоОдинToolStripMenuItem});
+            this.загрузитьToolStripMenuItem.Name = "загрузитьToolStripMenuItem";
+            this.загрузитьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.загрузитьToolStripMenuItem.Text = "Загрузить";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.Filter = "txt file | *.txt";
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "txt file | *.txt";
+            // 
+            // всеToolStripMenuItem
+            // 
+            this.всеToolStripMenuItem.Name = "всеToolStripMenuItem";
+            this.всеToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.всеToolStripMenuItem.Text = "Все";
+            this.всеToolStripMenuItem.Click += new System.EventHandler(this.СохранитьВсеАэродромыToolStripMenuItem_Click);
+            // 
+            // толькоВыбранныйToolStripMenuItem
+            // 
+            this.толькоВыбранныйToolStripMenuItem.Name = "толькоВыбранныйToolStripMenuItem";
+            this.толькоВыбранныйToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.толькоВыбранныйToolStripMenuItem.Text = "Только выбранный";
+            this.толькоВыбранныйToolStripMenuItem.Click += new System.EventHandler(this.СохранитьТолькоВыбранныйToolStripMenuItem_Click);
+            // 
+            // всеToolStripMenuItem1
+            // 
+            this.всеToolStripMenuItem1.Name = "всеToolStripMenuItem1";
+            this.всеToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.всеToolStripMenuItem1.Text = "Все";
+            this.всеToolStripMenuItem1.Click += new System.EventHandler(this.ЗагрузитьВсеToolStripMenuItem_Click);
+            // 
+            // толькоОдинToolStripMenuItem
+            // 
+            this.толькоОдинToolStripMenuItem.Name = "толькоОдинToolStripMenuItem";
+            this.толькоОдинToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.толькоОдинToolStripMenuItem.Text = "Только один";
+            this.толькоОдинToolStripMenuItem.Click += new System.EventHandler(this.ЗагрузитьТолькоОдинToolStripMenuItem_Click);
             // 
             // FormAerodrome
             // 
@@ -171,11 +254,15 @@
             this.Controls.Add(this.textBoxNewLevelName);
             this.Controls.Add(this.groupBoxTakePlane);
             this.Controls.Add(this.pictureBoxAerodrome);
+            this.Controls.Add(this.menuStrip);
+            this.MainMenuStrip = this.menuStrip;
             this.Name = "FormAerodrome";
             this.Text = "Аэродром";
             this.groupBoxTakePlane.ResumeLayout(false);
             this.groupBoxTakePlane.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAerodrome)).EndInit();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -194,5 +281,15 @@
         private System.Windows.Forms.Button buttonCheckPlanes;
         private System.Windows.Forms.PictureBox pictureBoxAerodrome;
         private System.Windows.Forms.Button buttonAddPlane;
+        private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem загрузитьToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem всеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem толькоВыбранныйToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem всеToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem толькоОдинToolStripMenuItem;
     }
 }
