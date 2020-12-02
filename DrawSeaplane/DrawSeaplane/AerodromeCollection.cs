@@ -151,7 +151,7 @@ namespace Seaplane
             return true;
         }
 
-        public bool LoadData(string filename, bool loadType) // true - collection; false - one dock
+        public bool LoadData(string filename, bool loadType)
         {
             if (!File.Exists(filename))
             {
@@ -160,17 +160,17 @@ namespace Seaplane
             using (StreamReader sr = new StreamReader(filename))
             {
                 string line = sr.ReadLine();
-                if (line.Contains("AerodromeCollection") && loadType)
+                if (line.Contains("AerodromeCollection") && !loadType)
                 {
                     aerodromeStages.Clear();
                 }
-                else if (line.Contains("OneAerodrome") && !loadType) { }
+                else if (line.Contains("OneAerodrome") && loadType) { }
                 else
                 { 
                     return false;
                 }
                 line = sr.ReadLine();
-                Vehicle ship = null;
+                Vehicle plane = null;
                 string key = string.Empty;
                 while (line != null && line.Contains("Aerodrome"))
                 {
@@ -186,13 +186,13 @@ namespace Seaplane
                     {
                         if (line.Split(separator)[0] == "Plane")
                         {
-                            ship = new Plane(line.Split(separator)[1]);
+                            plane = new Plane(line.Split(separator)[1]);
                         }
                         else if (line.Split(separator)[0] == "WaterPlane")
                         {
-                            ship = new WaterPlane(line.Split(separator)[1]);
+                            plane = new WaterPlane(line.Split(separator)[1]);
                         }
-                        var result = aerodromeStages[key] + ship;
+                        var result = aerodromeStages[key] + plane;
                         if (!result)
                         {
                             return false;

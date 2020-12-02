@@ -220,7 +220,7 @@ namespace Seaplane
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (aerodromeCollection.LoadData(openFileDialog.FileName, true))
+                if (aerodromeCollection.LoadData(openFileDialog.FileName, false))
                 {
                     MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -239,7 +239,7 @@ namespace Seaplane
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (aerodromeCollection.LoadData(openFileDialog.FileName, false))
+                if (aerodromeCollection.LoadData(openFileDialog.FileName, true))
                 {
                     MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
