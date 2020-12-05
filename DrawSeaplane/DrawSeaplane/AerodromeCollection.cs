@@ -118,40 +118,43 @@ namespace Seaplane
             {
                 File.Delete(filename);
             }
-            using (FileStream fs = new FileStream(filename, FileMode.Create))
+
+            if (aerodromeStages.ContainsKey(aerodromeName))
             {
-                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                using (FileStream fs = new FileStream(filename, FileMode.Create))
                 {
-                    sw.WriteLine($"OneAerodrome");
-
-                    sw.WriteLine($"Aerodrome{separator}{aerodromeName}");
-                    ITransport plane = null;
-                    var level = aerodromeStages[aerodromeName];
-
-                    for (int i = 0; (plane = level[i]) != null; i++)
+                    using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
                     {
-                        if (plane != null)
+                        sw.WriteLine($"OneAerodrome");
+
+                        sw.WriteLine($"Aerodrome{separator}{aerodromeName}");
+                        ITransport plane = null;
+                        var level = aerodromeStages[aerodromeName];
+
+                        for (int i = 0; (plane = level[i]) != null; i++)
                         {
-                            if (plane.GetType().Name == "Plane")
+                            if (plane != null)
                             {
-                                sw.Write($"Plane{separator}");
+                                if (plane.GetType().Name == "Plane")
+                                {
+                                    sw.Write($"Plane{separator}");
+                                }
+                                if (plane.GetType().Name == "WaterPlane")
+                                {
+                                    sw.Write($"WaterPlane{separator}");
+                                }
 
+                                sw.WriteLine(plane);
                             }
-                            if (plane.GetType().Name == "WaterPlane")
-                            {
-                                sw.Write($"WaterPlane{separator}");
-                            }
-
-                            sw.WriteLine(plane);
                         }
                     }
-
                 }
+                return true;
             }
-            return true;
+            return false;
         }
 
-        public bool LoadData(string filename, bool loadType)
+        public bool LoadData(string filename)
         {
             if (!File.Exists(filename))
             {
@@ -160,11 +163,10 @@ namespace Seaplane
             using (StreamReader sr = new StreamReader(filename))
             {
                 string line = sr.ReadLine();
-                if (line.Contains("AerodromeCollection") && !loadType)
+                if (line.Contains("AerodromeCollection"))
                 {
                     aerodromeStages.Clear();
                 }
-                else if (line.Contains("OneAerodrome") && loadType) { }
                 else
                 { 
                     return false;
@@ -174,10 +176,58 @@ namespace Seaplane
                 string key = string.Empty;
                 while (line != null && line.Contains("Aerodrome"))
                 {
+                    key = line.Split(separator)[1];                    
+                    aerodromeStages.Add(key, new Aerodrome<Vehicle, CircleForm>(pictureWidth, pictureHeight));
+
+                    line = sr.ReadLine();
+                    while (line != null && (line.Contains("Plane") || line.Contains("WaterPlane")))
+                    {
+                        if (line.Split(separator)[0] == "Plane")
+                        {
+                            plane = new Plane(line.Split(separator)[1]);
+                        }
+                        else if (line.Split(separator)[0] == "WaterPlane")
+                        {
+                            plane = new WaterPlane(line.Split(separator)[1]);
+                        }
+                        var result = aerodromeStages[key] + plane;
+                        if (!result)
+                        {
+                            return false;
+                        }
+                        line = sr.ReadLine();
+                    }
+                }
+                return true;
+            }
+        }
+
+        public bool LoadOneStage(string filename)
+        {
+            if (!File.Exists(filename))
+            {
+                return false;
+            }
+            using (StreamReader sr = new StreamReader(filename))
+            {
+                string line = sr.ReadLine();
+                if (line.Contains("OneAerodrome"))
+                {
+                   
+                }
+                else
+                {
+                    return false;
+                }
+                line = sr.ReadLine();
+                Vehicle plane = null;
+                string key = string.Empty;
+                if (line != null && line.Contains("Aerodrome"))
+                {
                     key = line.Split(separator)[1];
                     if (aerodromeStages.ContainsKey(key))
                     {
-                        aerodromeStages.Remove(key);
+                        aerodromeStages[key].ClearOneStage();
                     }
                     aerodromeStages.Add(key, new Aerodrome<Vehicle, CircleForm>(pictureWidth, pictureHeight));
 
@@ -200,6 +250,12 @@ namespace Seaplane
                         line = sr.ReadLine();
                     }
                 }
+
+                else 
+                {
+                    return false;
+                }
+
                 return true;
             }
         }

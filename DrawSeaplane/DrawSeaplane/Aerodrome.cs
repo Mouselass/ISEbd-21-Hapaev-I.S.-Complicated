@@ -93,5 +93,10 @@ namespace Seaplane
                 return null;
             }
         }
+
+        public void ClearOneStage()
+        {
+            _places.Clear();
+        }
     }
 }
