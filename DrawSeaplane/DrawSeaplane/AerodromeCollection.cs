@@ -211,11 +211,7 @@ namespace Seaplane
             using (StreamReader sr = new StreamReader(filename))
             {
                 string line = sr.ReadLine();
-                if (line.Contains("OneAerodrome"))
-                {
-                   
-                }
-                else
+                if (!line.Contains("OneAerodrome"))
                 {
                     return false;
                 }
