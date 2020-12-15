@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using NLog;
 
 namespace Seaplane
 {
@@ -16,11 +18,14 @@ namespace Seaplane
 
         private readonly Queue<Vehicle> planeQueue;
 
+        private readonly Logger logger;
+
         public FormAerodrome()
         {
             InitializeComponent();
             aerodromeCollection = new AerodromeCollection(pictureBoxAerodrome.Width, pictureBoxAerodrome.Height);
             planeQueue = new Queue<Vehicle>();
+            logger = LogManager.GetCurrentClassLogger();
             Draw();
         }
 
@@ -75,6 +80,7 @@ namespace Seaplane
             {
                 if (MessageBox.Show($"Удалить аэродром { listBoxAerodrome.SelectedItem.ToString()}?", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
+                    logger.Info($"Добавили аэродром {textBoxNewLevelName.Text}");
                     aerodromeCollection.DelAerodrome(listBoxAerodrome.SelectedItem.ToString());
                     ReloadLevels();
                 }
@@ -129,17 +135,34 @@ namespace Seaplane
         {
             if (listBoxAerodrome.SelectedIndex > -1 && maskedTextBox.Text != "")
             {
-                var plane = aerodromeCollection[listBoxAerodrome.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
-                if (plane != null)
+                try
                 {
-                    planeQueue.Enqueue(plane);
+                    var plane = aerodromeCollection[listBoxAerodrome.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
+                    if (plane != null)
+                    {
+                        logger.Info($"Изъят самолет {plane} с места {maskedTextBox.Text}");
+                        planeQueue.Enqueue(plane);
+                    }
+                    Draw();
                 }
-                Draw();
+
+                catch (PlaneNotFoundException ex)
+                {
+                    MessageBox.Show(ex.Message, "Не найдено", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Не найдено");
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Fatal("Неизвестная ошибка");
+                }
             }
         }
 
         private void listBoxAerodrome_SelectedIndexChanged(object sender, EventArgs e)
         {
+            logger.Info($"Перешли на аэродром {listBoxAerodrome.SelectedItem.ToString()}");
             Draw();
         }
 
@@ -152,7 +175,7 @@ namespace Seaplane
                 form.ShowDialog();
             }
             else
-            {
+            {              
                 MessageBox.Show("Не осталось самолетов для просмотра");
             }
         }
@@ -168,13 +191,29 @@ namespace Seaplane
         {
             if (plane != null && listBoxAerodrome.SelectedIndex > -1)
             {
-                if ((aerodromeCollection[listBoxAerodrome.SelectedItem.ToString()]) + plane)
+                try
                 {
-                    Draw();
+                    if ((aerodromeCollection[listBoxAerodrome.SelectedItem.ToString()]) + plane)
+                    {
+                        Draw();
+                        logger.Info($"Добавлен самолет {plane}");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Самолет не удалось поставить");
+                    }
                 }
-                else
+
+                catch (AerodromeOverflowException ex)
                 {
-                    MessageBox.Show("Самолет не удалось поставить");
+                    MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Переполнение");
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Fatal("Неизвестная ошибка");
                 }
             }
         }
@@ -183,15 +222,18 @@ namespace Seaplane
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (aerodromeCollection.SaveData(saveFileDialog.FileName))
+                try
                 {
-                    MessageBox.Show("Сохранение прошло успешно", "Результат",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    aerodromeCollection.SaveData(saveFileDialog.FileName);
+                    MessageBox.Show("Сохранение прошло успешно", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    logger.Info("Сохранено в файл " + saveFileDialog.FileName);
+
                 }
-                else
+
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Не сохранилось", "Результат",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Fatal("Неизвестная ошибка при сохранении");
                 }
             }
         }
@@ -200,37 +242,63 @@ namespace Seaplane
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (listBoxAerodrome.SelectedIndex > -1)
+                try
                 {
-                    if (aerodromeCollection.SaveData(saveFileDialog.FileName, listBoxAerodrome.SelectedItem.ToString()))
-                    {
-                        MessageBox.Show("Сохранение прошло успешно", "Результат",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Не сохранилось", "Результат",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    aerodromeCollection.SaveData(saveFileDialog.FileName, listBoxAerodrome.SelectedItem.ToString());
+                    MessageBox.Show("Сохранение прошло успешно", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    logger.Info("Сохранено в файл " + saveFileDialog.FileName);
+
                 }
-            }
+
+                catch (FormatException ex)
+                {
+                    MessageBox.Show(ex.Message, "Неверный формат файла", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Error("Неверный формат файла");
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Fatal("Неизвестная ошибка при сохранении");
+                }
+            }           
         }
 
         private void ЗагрузитьВсеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (aerodromeCollection.LoadData(openFileDialog.FileName))
+                try
                 {
-                    MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    aerodromeCollection.LoadData(openFileDialog.FileName);
+                    MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    logger.Info("Загружено из файла " + openFileDialog.FileName);
                     ReloadLevels();
                     Draw();
                 }
-                else
+
+                catch (FileNotFoundException ex)
                 {
-                    MessageBox.Show("Не загрузили", "Результат", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Файл не найден", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Error("Файл не найден");
+                }
+
+                catch (FormatException ex)
+                {
+                    MessageBox.Show(ex.Message, "Неверный формат файла", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Error("Неверный формат файла");
+                }
+
+                catch (NullReferenceException ex)
+                {
+                    MessageBox.Show(ex.Message, "Обращение к NULL объекту", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Error("Обращение к NULL объекту");
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка при загрузке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Fatal("Неизвестная ошибка при загрузке");
                 }
             }
         }
@@ -239,17 +307,37 @@ namespace Seaplane
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (aerodromeCollection.LoadOneStage(openFileDialog.FileName))
+                try
                 {
-                    MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    aerodromeCollection.LoadOneStage(openFileDialog.FileName);
+                    MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    logger.Info("Загружено из файла " + openFileDialog.FileName);
                     ReloadLevels();
                     Draw();
                 }
-                else
+
+                catch (FileNotFoundException ex)
                 {
-                    MessageBox.Show("Не загрузили", "Результат", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Файл не найден", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Error("Файл не найден");
+                }
+
+                catch (FormatException ex)
+                {
+                    MessageBox.Show(ex.Message, "Неверный формат файла", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Error("Неверный формат файла");
+                }
+
+                catch (NullReferenceException ex)
+                {
+                    MessageBox.Show(ex.Message, "Обращение к NULL объекту", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Error("Обращение к NULL объекту");
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка при загрузке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Fatal("Неизвестная ошибка при загрузке");
                 }
             }
         }

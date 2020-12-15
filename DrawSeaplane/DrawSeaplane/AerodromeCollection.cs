@@ -71,7 +71,7 @@ namespace Seaplane
             }
         }
 
-        public bool SaveData(string filename)
+        public void SaveData(string filename)
         {
             if (File.Exists(filename))
             {
@@ -109,10 +109,9 @@ namespace Seaplane
                     }
                 }
             }
-            return true;
         }
 
-        public bool SaveData(string filename, string aerodromeName)
+        public void SaveData(string filename, string aerodromeName)
         {
             if (File.Exists(filename))
             {
@@ -149,16 +148,15 @@ namespace Seaplane
                         }
                     }
                 }
-                return true;
             }
-            return false;
+            throw new FormatException();
         }
 
-        public bool LoadData(string filename)
+        public void LoadData(string filename)
         {
             if (!File.Exists(filename))
             {
-                return false;
+                throw new FileNotFoundException();
             }
             using (StreamReader sr = new StreamReader(filename))
             {
@@ -168,8 +166,8 @@ namespace Seaplane
                     aerodromeStages.Clear();
                 }
                 else
-                { 
-                    return false;
+                {
+                    throw new FormatException();
                 }
                 line = sr.ReadLine();
                 Vehicle plane = null;
@@ -193,27 +191,26 @@ namespace Seaplane
                         var result = aerodromeStages[key] + plane;
                         if (!result)
                         {
-                            return false;
+                            throw new NullReferenceException();
                         }
                         line = sr.ReadLine();
                     }
                 }
-                return true;
             }
         }
 
-        public bool LoadOneStage(string filename)
+        public void LoadOneStage(string filename)
         {
             if (!File.Exists(filename))
             {
-                return false;
+                throw new FileNotFoundException();
             }
             using (StreamReader sr = new StreamReader(filename))
             {
                 string line = sr.ReadLine();
                 if (!line.Contains("OneAerodrome"))
                 {
-                    return false;
+                    throw new FormatException();
                 }
                 line = sr.ReadLine();
                 Vehicle plane = null;
@@ -241,7 +238,7 @@ namespace Seaplane
                         var result = aerodromeStages[key] + plane;
                         if (!result)
                         {
-                            return false;
+                            throw new NullReferenceException();
                         }
                         line = sr.ReadLine();
                     }
@@ -249,10 +246,8 @@ namespace Seaplane
 
                 else 
                 {
-                    return false;
+                    throw new FormatException();
                 }
-
-                return true;
             }
         }
     }
