@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aerodrome.cs" />
+    <Compile Include="AerodromeAlreadyHaveException.cs" />
     <Compile Include="AerodromeCollection.cs" />
     <Compile Include="AerodromeOverflowException.cs" />
     <Compile Include="CircleForm.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="FormSeaplane.Designer.cs">
       <DependentUpon>FormSeaplane.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlaneComparer.cs" />
     <Compile Include="PlaneNotFoundException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

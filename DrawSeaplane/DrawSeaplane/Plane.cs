@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace Seaplane
 {
-    public class Plane : Vehicle
+    public class Plane : Vehicle, IEquatable<Plane>, IComparable<Plane>
     {
         protected readonly int planeWidth = 130;
 
@@ -15,11 +15,41 @@ namespace Seaplane
 
         protected readonly char separator = ';';
 
+        public LinkedList<Object> objectProperties;
+
+        private int currentIndex = 0;
+
+        public bool HasNext()
+        {
+            return (currentIndex++ < 3);
+        }
+
+        public string Next()
+        {
+            return objectProperties.Find(currentIndex).ToString();
+        }
+
+        public void Remove()
+        {
+            objectProperties.Remove(currentIndex);
+        }
+
+        public IEnumerator<Object> Iterator()
+        {
+            foreach (var i in objectProperties)
+            {
+                yield return i;
+            }
+        }
+
         public Plane(int maxSpeed, float weight, Color mainColor)
         {
             MaxSpeed = maxSpeed;
             Weight = weight;
             MainColor = mainColor;
+            objectProperties.AddLast(MaxSpeed);
+            objectProperties.AddLast(Weight);
+            objectProperties.AddLast(MainColor);
         }
 
         protected Plane(int maxSpeed, float weight, Color mainColor, int planeWidth, int planeHeight)
@@ -29,6 +59,9 @@ namespace Seaplane
             MainColor = mainColor;
             this.planeWidth = planeWidth;
             this.planeHeight = planeHeight;
+            objectProperties.AddLast(MaxSpeed);
+            objectProperties.AddLast(Weight);
+            objectProperties.AddLast(MainColor);
         }
 
         public Plane(string info)
@@ -39,6 +72,9 @@ namespace Seaplane
                 MaxSpeed = Convert.ToInt32(strs[0]);
                 Weight = Convert.ToInt32(strs[1]);
                 MainColor = Color.FromName(strs[2]);
+                objectProperties.AddLast(MaxSpeed);
+                objectProperties.AddLast(Weight);
+                objectProperties.AddLast(MainColor);
             }
         }
 
@@ -110,6 +146,64 @@ namespace Seaplane
         public override string ToString()
         {
             return $"{MaxSpeed}{separator}{Weight}{separator}{MainColor.Name}";
+        }
+
+        public bool Equals(Plane other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            if (GetType().Name != other.GetType().Name)
+            {
+                return false;
+            }
+            if (MaxSpeed != other.MaxSpeed)
+            {
+                return false;
+            }
+            if (Weight != other.Weight)
+            {
+                return false;
+            }
+            if (MainColor != other.MainColor)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is Plane planeObj))
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(planeObj);
+            }
+        }
+
+        public int CompareTo(Plane p) 
+        {
+            if (MaxSpeed != p.MaxSpeed)
+            {
+                return MaxSpeed.CompareTo(p.MaxSpeed);
+            }
+            if (Weight != p.Weight)
+            {
+                return Weight.CompareTo(p.Weight);
+            }
+            if (MainColor != p.MainColor)
+            {
+                return MainColor.Name.CompareTo(p.MainColor.Name);
+            }
+            return 0;
         }
     }
 }

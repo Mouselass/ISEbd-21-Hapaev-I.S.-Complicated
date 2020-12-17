@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace Seaplane
 {
-    public class WaterPlane : Plane
+    public class WaterPlane : Plane, IEquatable<WaterPlane>, IComparable<WaterPlane>
     {
 
         public Color DopColor { private set; get; }
@@ -21,6 +21,33 @@ namespace Seaplane
         public string FloatersForm { private set; get; }
 
         IDopElement Floater;
+
+        public new LinkedList<Object> objectProperties;
+
+        private int currentIndex = 0;
+
+        public new bool HasNext()
+        {
+            return (currentIndex++ < 8);
+        }
+
+        public new string Next()
+        {
+            return objectProperties.Find(currentIndex).ToString();
+        }
+
+        public new void Remove()
+        {
+            objectProperties.Remove(currentIndex);
+        }
+
+        public new IEnumerator<Object> Iterator()
+        {
+            foreach (var i in objectProperties)
+            {
+                yield return i;
+            }
+        }
 
         public void SetDopColor(Color color) 
         {
@@ -73,6 +100,11 @@ namespace Seaplane
                 Floater = new CircleForm(Floaters, DopColor);
             }
 
+            objectProperties.AddLast(DopColor);
+            objectProperties.AddLast(Star);
+            objectProperties.AddLast(Wing);
+            objectProperties.AddLast(Floaters);
+            objectProperties.AddLast(FloatersForm);
         }
 
         public WaterPlane(int maxSpeed, float weight, Color mainColor, Color dopColor, bool wing, bool star) :
@@ -81,6 +113,10 @@ namespace Seaplane
             DopColor = dopColor;
             Wing = wing;
             Star = star;
+
+            objectProperties.AddLast(DopColor);
+            objectProperties.AddLast(Star);
+            objectProperties.AddLast(Wing);
         }
 
         public WaterPlane(string info) : base(info)
@@ -108,6 +144,15 @@ namespace Seaplane
                 {
                     Floater = new CircleForm(Floaters, DopColor);
                 }
+
+                objectProperties.AddLast(MaxSpeed);
+                objectProperties.AddLast(Weight);
+                objectProperties.AddLast(MainColor);
+                objectProperties.AddLast(DopColor);
+                objectProperties.AddLast(Star);
+                objectProperties.AddLast(Wing);
+                objectProperties.AddLast(Floaters);
+                objectProperties.AddLast(FloatersForm);
             }
         }
 
@@ -157,6 +202,104 @@ namespace Seaplane
         public override string ToString()
         {
             return $"{base.ToString()}{separator}{DopColor.Name}{separator}{Star}{separator}{Wing}{separator}{Floaters}{separator}{FloatersForm}";
+        }
+
+        public bool Equals(WaterPlane other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            if (GetType().Name != other.GetType().Name)
+            {
+                return false;
+            }
+            if (MaxSpeed != other.MaxSpeed)
+            {
+                return false;
+            }
+            if (Weight != other.Weight)
+            {
+                return false;
+            }
+            if (MainColor != other.MainColor)
+            {
+                return false;
+            }
+            if (DopColor != other.DopColor)
+            {
+                return false;
+            }
+            if (Star != other.Star)
+            {
+                return false;
+            }
+            if (Wing != other.Wing)
+            {
+                return false;
+            }
+            if (Floaters != other.Floaters)
+            {
+                return false;
+            }
+            if (FloatersForm != other.FloatersForm)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is WaterPlane planeObj))
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(planeObj);
+            }
+        }
+
+        public int CompareTo(WaterPlane w)
+        {
+            if (MaxSpeed != w.MaxSpeed)
+            {
+                return MaxSpeed.CompareTo(w.MaxSpeed);
+            }
+            if (Weight != w.Weight)
+            {
+                return Weight.CompareTo(w.Weight);
+            }
+            if (MainColor != w.MainColor)
+            {
+                return MainColor.Name.CompareTo(w.MainColor.Name);
+            }
+            if (DopColor != w.DopColor)
+            {
+                return DopColor.Name.CompareTo(w.DopColor.Name);
+            }
+            if (Star != w.Star)
+            {
+                return Star.CompareTo(w.Star);
+            }
+            if (Wing != w.Wing)
+            {
+                return Wing.CompareTo(w.Wing);
+            }
+            if (Floaters != w.Floaters)
+            {
+                return Floaters.CompareTo(w.Floaters);
+            }
+            if (FloatersForm != w.FloatersForm)
+            {
+                return FloatersForm.CompareTo(w.FloatersForm);
+            }
+            return 0;
         }
     }
 }
