@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Collections;
 
 namespace Seaplane
 {
-    public class Plane : Vehicle, IEquatable<Plane>, IComparable<Plane>
+    public class Plane : Vehicle, IEquatable<Plane>, IComparable<Plane>, IEnumerable<object>, IEnumerator<object>
     {
         protected readonly int planeWidth = 130;
 
@@ -15,31 +16,27 @@ namespace Seaplane
 
         protected readonly char separator = ';';
 
-        public LinkedList<Object> objectProperties;
+        public LinkedList<object> objectProperties = new LinkedList<object>();
 
-        private int currentIndex = 0;
+        private int currentIndex = -1;
 
-        public bool HasNext()
+        public object Current => objectProperties.Find(currentIndex);
+
+        object IEnumerator<object>.Current => objectProperties.Find(currentIndex);
+
+        public void Dispose()
         {
-            return (currentIndex++ < 3);
         }
 
-        public string Next()
+        public bool MoveNext()
         {
-            return objectProperties.Find(currentIndex).ToString();
+            currentIndex++;
+            return (currentIndex < 8);
         }
 
-        public void Remove()
+        public void Reset()
         {
-            objectProperties.Remove(currentIndex);
-        }
-
-        public IEnumerator<Object> Iterator()
-        {
-            foreach (var i in objectProperties)
-            {
-                yield return i;
-            }
+            currentIndex = -1;
         }
 
         public Plane(int maxSpeed, float weight, Color mainColor)
@@ -204,6 +201,16 @@ namespace Seaplane
                 return MainColor.Name.CompareTo(p.MainColor.Name);
             }
             return 0;
+        }
+
+        public IEnumerator<object> GetEnumerator()
+        {
+            return (IEnumerator<object>)objectProperties;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

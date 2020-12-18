@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Collections;
 
 namespace Seaplane
 {
-    public class WaterPlane : Plane, IEquatable<WaterPlane>, IComparable<WaterPlane>
+    public class WaterPlane : Plane, IEquatable<WaterPlane>, IComparable<WaterPlane>, IEnumerable<object>, IEnumerator<object>
     {
 
         public Color DopColor { private set; get; }
@@ -22,32 +23,29 @@ namespace Seaplane
 
         IDopElement Floater;
 
-        public new LinkedList<Object> objectProperties;
+        public new LinkedList<object> objectProperties = new LinkedList<object>();
 
-        private int currentIndex = 0;
+        private int currentIndex = -1;
 
-        public new bool HasNext()
+        public new object Current => objectProperties.Find(currentIndex);
+
+        object IEnumerator<object>.Current => objectProperties.Find(currentIndex);
+
+        public new void Dispose()
         {
-            return (currentIndex++ < 8);
         }
 
-        public new string Next()
+        public new bool MoveNext()
         {
-            return objectProperties.Find(currentIndex).ToString();
+            currentIndex++;
+            return (currentIndex < 8);
         }
 
-        public new void Remove()
+        public new void Reset()
         {
-            objectProperties.Remove(currentIndex);
+            currentIndex = -1;
         }
 
-        public new IEnumerator<Object> Iterator()
-        {
-            foreach (var i in objectProperties)
-            {
-                yield return i;
-            }
-        }
 
         public void SetDopColor(Color color) 
         {
@@ -300,6 +298,16 @@ namespace Seaplane
                 return FloatersForm.CompareTo(w.FloatersForm);
             }
             return 0;
+        }
+
+        public new IEnumerator<object> GetEnumerator()
+        {
+            return (IEnumerator<object>)objectProperties;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

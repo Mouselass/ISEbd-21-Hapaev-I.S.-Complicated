@@ -122,10 +122,10 @@ namespace Seaplane
                         sw.WriteLine($"OneAerodrome");
 
                         sw.WriteLine($"Aerodrome{separator}{aerodromeName}");
-                        ITransport plane = null;
+                        
                         var level = aerodromeStages[aerodromeName];
 
-                        for (int i = 0; (plane = level[i]) != null; i++)
+                        foreach (ITransport plane in level)
                         {
                             if (plane != null)
                             {
